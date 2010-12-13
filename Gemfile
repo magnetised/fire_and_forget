@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 
 gem "yajl-ruby", "~>0.7"
+gem "daemons", "~>1.1.0"
 
 group :development do
   gem "shoulda", ">= 0"

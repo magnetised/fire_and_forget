@@ -51,7 +51,7 @@ class TestFireAndForget < Test::Unit::TestCase
   context "tasks" do
     should "merge task params and calling params" do
       task = FAF::Task.new(:publish, "/usr/bin", {:param1 => "value1", :param2 => "value2"}, 9)
-      task.command({"param2" => "newvalue2", :param3 => "value3"}).should == %(fire||9||/usr/bin --param1="value1" --param2="newvalue2" --param3="value3")
+      task.command({"param2" => "newvalue2", :param3 => "value3"}).should == %(fire||publish||9||/usr/bin --param1="value1" --param2="newvalue2" --param3="value3")
     end
   end
 
@@ -59,7 +59,7 @@ class TestFireAndForget < Test::Unit::TestCase
     should "send right command to server" do
       FAF.add_task(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 12)
       connection = Object.new
-      mock(connection).send(%(fire||12||/publish --param1="value1" --param2="value3"), 0)
+      mock(connection).send(%(fire||publish||12||/publish --param1="value1" --param2="value3"), 0)
       stub(connection).flush
       stub(connection).close_write
       mock(connection).read { "99999" }
@@ -69,6 +69,24 @@ class TestFireAndForget < Test::Unit::TestCase
       mock(TCPSocket).open("10.0.1.10", 9007) { connection }
       pid = FAF.publish({:param2 => "value3"})
       pid.should == "99999"
+    end
+  end
+
+  context "command" do
+    should "parse fire command" do
+      task = FAF::Task.new(:publish, "/publish", {:param1 => "value1"}, 9)
+      command = task.command
+      result = FAF::Command.parse(command)
+      result.should be_instance_of(FAF::Command::FireCommand)
+      result.tag.should == "publish"
+      result.niceness.should == 9
+      result.command.should == %(/publish --param1="value1")
+    end
+    should "parse fire command with default niceness" do
+      task = FAF::Task.new(:publish, "/publish", {:param1 => "value1"})
+      command = task.command
+      result = FAF::Command.parse(command)
+      result.niceness.should == 0
     end
   end
 end
