@@ -14,6 +14,12 @@ class TestFireAndForget < Test::Unit::TestCase
     should "enable mapping of task to a binary" do
       FAF.add_task(:publish, "/path/to/binary")
       FAF.binary(:publish).should ==  "/path/to/binary"
+      FAF[:publish].binary.should ==  "/path/to/binary"
+    end
+
+    should "enable setting of a niceness value for the task" do
+      FAF.add_task(:publish, "/path/to/binary", 10)
+      FAF[:publish].niceness.should ==  10
     end
 
     should "enable launching a task by its name" do
@@ -44,16 +50,16 @@ class TestFireAndForget < Test::Unit::TestCase
 
   context "tasks" do
     should "merge task params and calling params" do
-      task = FAF::Task.new(:publish, "/usr/bin", {:param1 => "value1", :param2 => "value2"})
-      task.command({"param2" => "newvalue2", :param3 => "value3"}).should == %(launch||/usr/bin --param1="value1" --param2="newvalue2" --param3="value3")
+      task = FAF::Task.new(:publish, "/usr/bin", {:param1 => "value1", :param2 => "value2"}, 9)
+      task.command({"param2" => "newvalue2", :param3 => "value3"}).should == %(fire||9||/usr/bin --param1="value1" --param2="newvalue2" --param3="value3")
     end
   end
 
   context "client" do
     should "send right command to server" do
-      FAF.add_task(:publish, "/publish", {:param1 => "value1", :param2 => "value2"})
+      FAF.add_task(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 12)
       connection = Object.new
-      mock(connection).send(%(launch||/publish --param1="value1" --param2="value3"), 0)
+      mock(connection).send(%(fire||12||/publish --param1="value1" --param2="value3"), 0)
       stub(connection).flush
       stub(connection).close_write
       mock(connection).read { "99999" }
