@@ -9,10 +9,16 @@ rescue Bundler::BundlerError => e
 end
 require 'test/unit'
 require 'shoulda'
+require 'matchy'
+require 'rr'
+
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
+
+
 require 'fire_and_forget'
 
 class Test::Unit::TestCase
+  include RR::Adapters::TestUnit
 end
