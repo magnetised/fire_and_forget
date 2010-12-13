@@ -8,8 +8,8 @@ module FireAndForget
     end
 
     def fire
-      result = open_connection do |client|
-        client.send(task.command(params), 0)
+      result = open_connection do |connection|
+        connection.send(task.command(params), 0)
       end
 
     end
@@ -22,7 +22,6 @@ module FireAndForget
         connection.flush
         connection.close_write
         result = connection.read
-
       ensure
         connection.close if connection rescue nil
       end

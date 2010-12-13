@@ -56,11 +56,13 @@ class TestFireAndForget < Test::Unit::TestCase
       mock(connection).send(%(launch||/publish --param1="value1" --param2="value3"), 0)
       stub(connection).flush
       stub(connection).close_write
-      stub(connection).read
+      mock(connection).read { "99999" }
+      mock(connection).close
       FAF.bind_address = "10.0.1.10"
       FAF.port = 9007
       mock(TCPSocket).open("10.0.1.10", 9007) { connection }
-      FAF.publish({:param2 => "value3"})
+      pid = FAF.publish({:param2 => "value3"})
+      pid.should == "99999"
     end
   end
 end
