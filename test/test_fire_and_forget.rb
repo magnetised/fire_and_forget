@@ -38,28 +38,29 @@ class TestFireAndForget < Test::Unit::TestCase
       FAF.bind_address = "10.0.1.10"
       FAF.bind_address.should == "10.0.1.10"
     end
-
-    should "merge default params and task params" do
-      FAF.add_task(:publish, "/path/to/binary", {:param2 => "notvalue2", :param3 => "value3" })
-
-      args = {:param1 => "value1", :param2 => "value2"}
-      # mock(FAF::Client).new(:publish, {:param1 => "value1", :param2 => "value2", :param3 => "value3" })
-      # FAF.fire(:publish, args)
-    end
   end
 
-  context "tasks" do
-    should "merge task params and calling params" do
-      task = FAF::Task.new(:publish, "/usr/bin", {:param1 => "value1", :param2 => "value2"}, 9)
-      task.command({"param2" => "newvalue2", :param3 => "value3"}).should == %(fire||publish||9||/usr/bin --param1="value1" --param2="newvalue2" --param3="value3")
+  context "commands" do
+    should "serialize and deserialize correctly" do
+      task = FAF::Task.new(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 9)
+      cmd = FAF::Command::CommandBase.new(task, {"param2" => "newvalue2", :param3 => "value3"})
+      cmd2 = FAF::Command.load(cmd.dump)
+      task2 = cmd2.task
+      task2.binary.should == task.binary
+      task2.params.should == task.params
+      task2.name.should == task.name
+      cmd.params.should == {"param1" => "value1", "param2" => "newvalue2", "param3" => "value3"}
     end
   end
 
   context "client" do
     should "send right command to server" do
-      FAF.add_task(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 12)
+      task = FAF.add_task(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 12)
+      command = Object.new
+      mock(command).dump { "dumpedcommand" }
+      mock(FAF::Command::FireCommand).new(task, {:param2 => "value3"}) { command }
       connection = Object.new
-      mock(connection).send(%(fire||publish||12||/publish --param1="value1" --param2="value3"), 0)
+      mock(connection).send("dumpedcommand", 0)
       stub(connection).flush
       stub(connection).close_write
       mock(connection).read { "99999" }
@@ -72,21 +73,17 @@ class TestFireAndForget < Test::Unit::TestCase
     end
   end
 
-  context "command" do
-    should "parse fire command" do
-      task = FAF::Task.new(:publish, "/publish", {:param1 => "value1"}, 9)
-      command = task.command
-      result = FAF::Command.parse(command)
-      result.should be_instance_of(FAF::Command::FireCommand)
-      result.tag.should == "publish"
-      result.niceness.should == 9
-      result.command.should == %(/publish --param1="value1")
+  context "server" do
+    setup do
+      @server = FAF::Server.new
     end
-    should "parse fire command with default niceness" do
-      task = FAF::Task.new(:publish, "/publish", {:param1 => "value1"})
-      command = task.command
-      result = FAF::Command.parse(command)
-      result.niceness.should == 0
+
+    should "run any command sent to it" do
+      command = Object.new
+      mock(FAF::Command).load(is_a(String)) { command }
+      mock(command).run { "666" }
+      result = @server.load("object")
+      result.should == "666"
     end
   end
 end

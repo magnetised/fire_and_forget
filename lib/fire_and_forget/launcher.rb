@@ -21,12 +21,16 @@ module FireAndForget
     end
 
     def fire(task_name, params={})
-      task = tasks[task_name]
-      client = Client.new(task, params)
-      client.fire
+      run_command(task_name, Command::FireCommand, params)
     end
 
     protected
+
+    def run_command(task_name, command_class, params)
+      task = tasks[task_name]
+      command = command_class.new(task, params)
+      Client.run(command)
+    end
 
     def method_missing(method, *args, &block)
       if tasks.key?(method)

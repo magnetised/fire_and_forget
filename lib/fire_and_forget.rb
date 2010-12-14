@@ -6,6 +6,7 @@ module FireAndForget
   autoload :Task, "fire_and_forget/task"
   autoload :Client, "fire_and_forget/client"
   autoload :Command, "fire_and_forget/command"
+  autoload :Server, "fire_and_forget/server"
 
   extend Config
   extend Utilities

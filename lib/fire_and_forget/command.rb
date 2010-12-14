@@ -3,30 +3,37 @@ module FireAndForget
   module Command
     SEPARATOR = "||".freeze
 
-    def self.parse(command)
-      action, tag, *parts = command.split(SEPARATOR)
-      binary = parts[-1]
-      options = parts[0..-2]
-      klass = self.const_get("#{action.capitalize}Command")
-      klass.new(tag, binary, options)
+    def self.load(command)
+      Marshal.load(command)
     end
 
     class CommandBase
-      attr_reader :tag, :command
+      attr_reader :tag, :cmd, :params, :task
 
-      def initialize(tag, command, options=nil)
-        @tag, @command, @options = tag, command, options
-        parse_options if @options
+      def initialize(task, params={})
+        @task, @params = task, merge_params(task.params, params)
       end
 
-      def run
+      def dump
+        Marshal.dump(self)
+      end
+
+      def run(params={})
         # overridden in subclasses
       end
 
-      def parse_options
-        # overridden in subclasses
+
+      def merge_params(task_params, call_params)
+        params = task_params.to_a.inject({}) do |hash, (key, value)|
+          hash[key.to_s] = value; hash
+        end
+        call_params.each do |key, value|
+          params[key.to_s] = value
+        end if call_params
+        params
       end
     end
+
     autoload :FireCommand, "fire_and_forget/command/fire_command"
   end
 end

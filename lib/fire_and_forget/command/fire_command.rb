@@ -6,11 +6,19 @@ module FireAndForget
     class FireCommand < CommandBase
       attr_reader :niceness
 
-      def parse_options
-        @niceness = @options[0].to_i.abs rescue 0
+      def niceness
+        @task.niceness
       end
 
-      def run
+      # def serialize
+        # %(fire||#{tag}||#{niceness}||#{binary} #{FAF.to_arguments(merge_params(params))})
+      # end
+
+      def cmd
+        %(#{@task.binary} #{FAF.to_arguments(@params)})
+      end
+
+      def run(params={})
         pid = fork do
           Daemons.daemonize
           system("renice +#{niceness} #{$$}") if niceness > 0
