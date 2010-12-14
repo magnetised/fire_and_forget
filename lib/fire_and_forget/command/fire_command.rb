@@ -10,21 +10,18 @@ module FireAndForget
         @task.niceness
       end
 
-      # def serialize
-        # %(fire||#{tag}||#{niceness}||#{binary} #{FAF.to_arguments(merge_params(params))})
-      # end
-
       def cmd
         %(#{@task.binary} #{FAF.to_arguments(@params)})
       end
 
-      def run(params={})
+      def run
         pid = fork do
           Daemons.daemonize
-          system("renice +#{niceness} #{$$}") if niceness > 0
-          exec(command)
+          Process.setpriority(Process::PRIO_PROCESS, 0, niceness) if niceness > 0
+          exec(cmd)
         end
         Process.detach(pid) if pid
+        FAF::Server.set_pid(@task, pid)
         pid
       end
     end

@@ -1,0 +1,65 @@
+#!/usr/bin/env ruby
+
+
+Dir.chdir(File.join(File.dirname(__FILE__), '..'))
+
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+
+require 'rubygems'
+require 'bundler'
+begin
+  Bundler.setup(:default)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
+end
+
+require 'ostruct'
+require 'optparse'
+require 'socket'
+require 'fire_and_forget'
+
+options = OpenStruct.new
+options.bind_address = "127.0.0.1"
+options.port = 3001
+
+OptionParser.new do |opts|
+  opts.on("-a", "--bind-address ADDRESS", "Bind Address") { |v| options.bind_address = v }
+  opts.on("-p", "--port PORT", Integer, "Port") { |p| options.port = p }
+end.parse!
+
+server = nil
+
+begin
+  server = TCPServer.new(options.bind_address, options.port)
+rescue Errno::EADDRINUSE
+  puts "FAF already running on #{options.bind_address}:#{options.port}"
+  exit(1)
+end
+puts "FAF running on #{options.bind_address}:#{options.port}"
+
+
+run = true
+
+server_thread = Thread.new do
+  while run and (session = server.accept)
+    request = ""
+    while l = session.gets
+      request << l
+    end
+    response = "#{FAF::Server.parse(request)}"
+    session.close_read
+    session.write(response)
+    session.close
+  end
+end
+
+['INT', 'TERM'].each do |signal|
+  trap(signal) do
+    run = false;
+    server_thread.exit
+  end
+end
+
+server_thread.join

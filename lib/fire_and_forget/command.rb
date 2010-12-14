@@ -18,7 +18,7 @@ module FireAndForget
         Marshal.dump(self)
       end
 
-      def run(params={})
+      def run
         # overridden in subclasses
       end
 
@@ -35,5 +35,7 @@ module FireAndForget
     end
 
     autoload :FireCommand, "fire_and_forget/command/fire_command"
+    autoload :SetStatus, "fire_and_forget/command/set_status"
+    autoload :GetStatus, "fire_and_forget/command/get_status"
   end
 end
