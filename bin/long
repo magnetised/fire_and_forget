@@ -19,7 +19,6 @@ require 'fire_and_forget'
 
 include FAF::DaemonMethods
 
-FAF.port = 2234
 
 File.open(File.join(File.dirname(__FILE__), "../../long.out"), 'w') do |file|
   file.sync = true

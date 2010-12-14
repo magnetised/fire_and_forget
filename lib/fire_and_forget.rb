@@ -1,5 +1,7 @@
 
 module FireAndForget
+  DEFAULT_PORT = 3001
+
   autoload :Config, "fire_and_forget/config"
   autoload :Utilities, "fire_and_forget/utilities"
   autoload :Launcher, "fire_and_forget/launcher"
