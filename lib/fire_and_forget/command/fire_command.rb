@@ -15,8 +15,9 @@ module FireAndForget
       end
 
       def run
+        puts cmd
         pid = fork do
-          Daemons.daemonize
+          Daemons.daemonize(:backtrace => true)
           Process.setpriority(Process::PRIO_PROCESS, 0, niceness) if niceness > 0
           exec(cmd)
         end

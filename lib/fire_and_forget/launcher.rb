@@ -21,7 +21,6 @@ module FireAndForget
     end
 
     def fire(task_name, params={})
-      # run_command(task_name, Command::FireCommand, params)
       task = tasks[task_name]
       command = Command::FireCommand.new(task, params)
       Client.run(command)
@@ -38,9 +37,6 @@ module FireAndForget
     end
 
     protected
-
-    def run_command(task_name, command_class, params)
-    end
 
     def method_missing(method, *args, &block)
       if tasks.key?(method)

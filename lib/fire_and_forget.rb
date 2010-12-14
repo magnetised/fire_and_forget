@@ -7,6 +7,7 @@ module FireAndForget
   autoload :Client, "fire_and_forget/client"
   autoload :Command, "fire_and_forget/command"
   autoload :Server, "fire_and_forget/server"
+  autoload :DaemonMethods, "fire_and_forget/daemon_methods"
 
   extend Config
   extend Utilities

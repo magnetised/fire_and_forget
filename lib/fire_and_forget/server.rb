@@ -15,7 +15,7 @@ module FireAndForget
     end
 
     def self.set_pid(task, pid)
-      pids[task.name] = pid
+      pids[task.name] = pid.to_i
     end
 
     def self.get_pid(task)

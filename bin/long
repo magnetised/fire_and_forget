@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+Dir.chdir(File.join(File.dirname(__FILE__), '..'))
+
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+
+require 'rubygems'
+require 'bundler'
+
+begin
+  Bundler.setup(:default)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
+end
+
+require 'fire_and_forget'
+
+include FAF::DaemonMethods
+
+FAF.port = 2234
+
+File.open(File.join(File.dirname(__FILE__), "../../long.out"), 'w') do |file|
+  file.sync = true
+  file.write("PID: #{$$}\n")
+  file.write(`ps -xO nice | grep  '^#{$$}'`)
+  file.write("\n")
+  60.times do |i|
+    file.write("#{i}\n")
+    begin
+      set_status(:publish, i)
+    rescue Exception => e
+      file.write(e.to_s + "\n")
+    end
+    sleep(1)
+  end
+end
