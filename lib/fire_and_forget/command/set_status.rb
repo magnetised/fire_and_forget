@@ -8,8 +8,8 @@ module FireAndForget
       end
 
       def run
-        FAF::Server.set_pid(@task_name, @pid)
-        FAF::Server.status[@task_name] = @status_value
+        FireAndForget::Server.set_pid(@task_name, @pid)
+        FireAndForget::Server.status[@task_name] = @status_value
       end
     end
   end

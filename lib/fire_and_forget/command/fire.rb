@@ -15,7 +15,7 @@ module FireAndForget
       end
 
       def cmd
-        %(#{binary} #{FAF.to_arguments(@params)})
+        %(#{binary} #{FireAndForget.to_arguments(@params)})
       end
 
       def valid?

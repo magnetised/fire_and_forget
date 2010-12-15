@@ -4,7 +4,7 @@ module FireAndForget
     def self.[](task_name)
       m = Module.new do
         def self.included(klass)
-          FAF.map_pid(self.task_name, $$)
+          FireAndForget.map_pid(self.task_name, $$)
         end
 
         def self.task_name=(task_name)
@@ -16,7 +16,7 @@ module FireAndForget
         end
 
         def set_task_status(status)
-          FAF.set_status(@@task_name, status)
+          FireAndForget.set_status(@@task_name, status)
         end
       end
       m.task_name = task_name

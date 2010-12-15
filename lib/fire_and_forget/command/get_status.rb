@@ -7,7 +7,7 @@ module FireAndForget
       end
 
       def run
-        FAF::Server.status[@task_name]
+        FireAndForget::Server.status[@task_name]
       end
     end
   end

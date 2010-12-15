@@ -1,7 +1,7 @@
+require 'socket'
+
 module FireAndForget
   class Client
-
-
 
     class << self
       def run(cmd)
@@ -13,7 +13,7 @@ module FireAndForget
       def open_connection
         connection = result = nil
         begin
-          connection = TCPSocket.open(FAF.bind_address, FAF.port)
+          connection = TCPSocket.open(FireAndForget.bind_address, FireAndForget.port)
           yield(connection)
           connection.flush
           connection.close_write

@@ -9,7 +9,7 @@ module FireAndForget
       end
 
       def run
-        FAF::Server.pids[@task_name] = @pid
+        FireAndForget::Server.pids[@task_name] = @pid
       end
     end
   end

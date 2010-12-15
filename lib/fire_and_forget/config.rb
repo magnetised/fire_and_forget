@@ -4,7 +4,7 @@ module FireAndForget
     attr_accessor :bind_address
 
     def port
-      @port ||= FAF::DEFAULT_PORT
+      @port ||= FireAndForget::DEFAULT_PORT
     end
 
     def bind_address

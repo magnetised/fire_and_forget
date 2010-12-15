@@ -7,7 +7,7 @@ module FireAndForget
       end
 
       def run
-        FAF::Server.kill(@task_name, @signal)
+        FireAndForget::Server.kill(@task_name, @signal)
       end
     end
   end
