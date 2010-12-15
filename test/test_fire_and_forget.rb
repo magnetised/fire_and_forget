@@ -117,7 +117,7 @@ class TestFireAndForget < Test::Unit::TestCase
       mock(FAF::Client).run(satisfy { |cmd|
         (cmd.pid == $$) && (cmd.task_name == :tasking)
       })
-      TaskClass.send(:include, FAF::DaemonMethods[:tasking])
+      TaskClass.send(:include, FAF::Daemon[:tasking])
     end
   end
 end

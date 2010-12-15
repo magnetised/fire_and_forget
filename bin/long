@@ -17,7 +17,7 @@ end
 
 require 'fire_and_forget'
 
-include FAF::DaemonMethods[:publish]
+include FAF::Daemon[:publish]
 
 
 File.open(File.join(File.dirname(__FILE__), "../../long.out"), 'w') do |file|

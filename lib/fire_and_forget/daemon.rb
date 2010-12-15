@@ -1,5 +1,5 @@
 module FireAndForget
-  module DaemonMethods # need better name!
+  module Daemon # need better name!
 
     def self.[](task_name)
       m = Module.new do
