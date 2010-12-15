@@ -16,4 +16,4 @@ module FireAndForget
   extend Launcher
 end
 
-FAF = FireAndForget unlesss defined?(FAF)
+FAF = FireAndForget unless defined?(FAF)

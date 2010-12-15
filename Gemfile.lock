@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    fire_and_forget (0.1.0)
+      daemons (~> 1.1.0)
+      json (~> 1.4.6)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -8,11 +15,10 @@ GEM
       git (>= 1.2.5)
       rake
     jnunemaker-matchy (0.4.0)
+    json (1.4.6)
     rake (0.8.7)
-    rcov (0.9.7.1)
     rr (1.0.2)
     shoulda (2.11.3)
-    yajl-ruby (0.7.8)
 
 PLATFORMS
   ruby
@@ -20,9 +26,9 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.0.0)
   daemons (~> 1.1.0)
+  fire_and_forget!
   jeweler (~> 1.5.1)
   jnunemaker-matchy (~> 0.4)
-  rcov
+  json (~> 1.4.6)
   rr (~> 1.0.2)
   shoulda
-  yajl-ruby (~> 0.7)

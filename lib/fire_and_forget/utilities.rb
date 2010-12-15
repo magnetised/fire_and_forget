@@ -1,4 +1,4 @@
-require "yajl"
+require "json"
 
 module FireAndForget
   module Utilities
@@ -9,7 +9,11 @@ module FireAndForget
     end
 
     def to_json(obj)
-      Yajl::Encoder.new.encode(obj)
+      if obj.is_a?(String)
+        obj.inspect
+      else
+        JSON.generate(obj)
+      end
     end
   end
 end
