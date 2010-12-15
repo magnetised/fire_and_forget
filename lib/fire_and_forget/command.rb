@@ -34,7 +34,7 @@ module FireAndForget
       end
     end
 
-    autoload :FireCommand, "fire_and_forget/command/fire_command"
+    autoload :Fire, "fire_and_forget/command/fire"
     autoload :SetStatus, "fire_and_forget/command/set_status"
     autoload :GetStatus, "fire_and_forget/command/get_status"
     autoload :SetPid, "fire_and_forget/command/set_pid"

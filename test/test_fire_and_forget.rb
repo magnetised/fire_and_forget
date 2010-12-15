@@ -66,7 +66,7 @@ class TestFireAndForget < Test::Unit::TestCase
     should "only run scripts belonging to the same user as the ruby process" do
       stub(File).exist?("/publish") { true }
       stub(File).owned?("/publish") { false }
-      cmd = FAF::Command::FireCommand.new(@task)
+      cmd = FAF::Command::Fire.new(@task)
       lambda { cmd.run }.should raise_error(Errno::EACCES)
     end
   end
@@ -76,7 +76,7 @@ class TestFireAndForget < Test::Unit::TestCase
       task = FAF.add_task(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 12)
       command = Object.new
       mock(command).dump { "dumpedcommand" }
-      mock(FAF::Command::FireCommand).new(task, {:param2 => "value3"}) { command }
+      mock(FAF::Command::Fire).new(task, {:param2 => "value3"}) { command }
       connection = Object.new
       mock(connection).send("dumpedcommand", 0)
       stub(connection).flush

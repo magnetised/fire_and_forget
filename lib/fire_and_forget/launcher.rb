@@ -22,7 +22,7 @@ module FireAndForget
 
     def fire(task_name, params={})
       task = tasks[task_name]
-      command = Command::FireCommand.new(task, params)
+      command = Command::Fire.new(task, params)
       Client.run(command)
     end
 

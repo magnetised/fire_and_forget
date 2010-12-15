@@ -3,7 +3,7 @@ require 'daemons'
 
 module FireAndForget
   module Command
-    class FireCommand < CommandBase
+    class Fire < CommandBase
       attr_reader :niceness
 
       def niceness
