@@ -20,8 +20,8 @@ What it doesn't:
 
 FAF works by running a simple TCP socket server so before we want to use it we have to start this server.
 
-	$ faf
-	FAF process 16235 listening on 127.0.0.1:3001...
+  $ faf
+  FAF process 16235 listening on 127.0.0.1:3001...
 
 The service defaults to listening to port 3001 on localhost. You can change these values thus:
 
@@ -30,22 +30,22 @@ The service defaults to listening to port 3001 on localhost. You can change thes
 If you do this you will need to set both the web-app and the tasks to use the right values using
 
   FireAndForget.port = 9090
-	FireAndForget.bind_address = "192.168.1.22"
+  FireAndForget.bind_address = "192.168.1.22"
 
 Now inside our Ruby app:
 
-	require 'rubygems'
+  require 'rubygems'
   require 'fire_and_forget'
 
   # First set register our task by giving it a name and a path to a script file
-	FireAndForget.add_task(:long_running_task, "/path/to/script")
+  FireAndForget.add_task(:long_running_task, "/path/to/script")
 
   # when we want to call the script we simple call #fire passing the name of the task and the options
-	# we want to pass
-	FireAndForget.fire(:long_running_task, {:param3 => "value3"})
+  # we want to pass
+  FireAndForget.fire(:long_running_task, {:param3 => "value3"})
 
   # Or, use the name as a method:
-	FireAndForget.long_running_task({:param3 => "value3"})
+  FireAndForget.long_running_task({:param3 => "value3"})
 
 This will result in the following command being exec'd in an independent process:
 
@@ -55,20 +55,20 @@ It up to the script to parse and deal with the command line options.
 
 Interprocess communication is relatively easy. Take the following as the source of the script "/path/to/script"
 
-	#!/usr/bin/env ruby
+  #!/usr/bin/env ruby
 
-	require 'rubygems'
-	require 'fire_and_forget'
+  require 'rubygems'
+  require 'fire_and_forget'
 
-  # this will mix in the comms methods and map this task to the :long_running_task label used in the calling
-	# script
-	include FireAndForget::Daemon[:long_running_task]
+  # this will mix in the comms methods and map this task to the :long_running_task label
+  # used in the calling script
+  include FireAndForget::Daemon[:long_running_task]
 
   30.times do |i|
-	  # update our status. What you put here is up to you, but it should be a String
-		set_task_status("#{i+1} of 30")
+    # update our status. What you put here is up to you, but it should be a String
+    set_task_status("#{i+1} of 30")
     sleep(1)
-	end
+  end
 
 Now in the client all we have to do to get the status for our task is:
 
@@ -81,7 +81,7 @@ If we decided we've had enough then we can kill it:
   FireAndForget.term(:long_running_task)
 
   # Or send any signal (see the Process.kill documentation)
-	FireAndForget.kill(:long_running_task, "HUP")
+  FireAndForget.kill(:long_running_task, "HUP")
 
 == Security
 
