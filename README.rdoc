@@ -17,6 +17,7 @@ What it doesn't:
 
 == Quick Start
 
+  gem install fire_and_forget
 
 FAF works by running a simple TCP socket server so before we want to use it we
 have to start this server.
@@ -28,6 +29,7 @@ The service defaults to listening to port 3001 on localhost. You can change
 these values thus:
 
   $ fire_forget -a 192.168.1.22 -p 9090
+  FAF process 16240 listening on 192.168.1.22:9090...
 
 If you do this you will need to set both the web-app and the tasks to use the
 right values using
@@ -68,7 +70,10 @@ will issue the following command in the background:
 
   /path/to/script --param1="value1" --param2="value2" --param3="newvalue3"
 
-the final parameter in the #add_task call is a "niceness" value. This will set the
+Parameter values are JSON encoded so you can pass arrays or hashes. Again, it is
+up to the script to decode these values.
+
+The final parameter in the #add_task call is a "niceness" value. This will set the
 UNIX nice setting of the script to the desired value so that you can launch
 intensive background tasks without affecting the performance of your front line
 HTTP services.
@@ -111,6 +116,11 @@ system commands, only scripts belonging to the same user as the F&F server
 process are executed. This might not be enough so in the future I might add a
 limit on the locations of runnable scripts.
 
+== TODO
+
+- Embed info about the F&F server address into the script parameters and then silently extract those inside the Daemon module. Otherwise you might have to duplicate configuration values (or jump through hoops to avoid it)
+- Improve security restrictions
+- Improve the tests so they are closer to testing the full stack
 
 == Contributing to fire_and_forget
 
