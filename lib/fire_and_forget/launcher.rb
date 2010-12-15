@@ -36,6 +36,11 @@ module FireAndForget
       Client.run(command)
     end
 
+    def map_pid(task_name, pid)
+      command = Command::SetPid.new(task_name, pid)
+      Client.run(command)
+    end
+
     protected
 
     def method_missing(method, *args, &block)

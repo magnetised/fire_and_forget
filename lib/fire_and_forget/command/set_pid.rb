@@ -2,8 +2,10 @@ module FireAndForget
   module Command
     class SetPid < CommandBase
 
-      def initialize(task, pid)
-        @task_name, @pid = task.name.to_sym, pid.to_i
+      attr_reader :task_name, :pid
+
+      def initialize(task_name, pid)
+        @task_name, @pid = task_name.to_sym, pid.to_i
       end
 
       def run

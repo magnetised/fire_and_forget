@@ -52,6 +52,7 @@ class TestFireAndForget < Test::Unit::TestCase
       cmd.params.should == {"param1" => "value1", "param2" => "newvalue2", "param3" => "value3"}
     end
   end
+
   context "actions" do
     setup do
       @task = FAF::Task.new(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 9)
@@ -102,6 +103,21 @@ class TestFireAndForget < Test::Unit::TestCase
       mock(command).run { "666" }
       result = FAF::Server.parse("object")
       result.should == "666"
+    end
+  end
+  context "daemon methods" do
+    setup do
+      class ::TaskClass; end
+    end
+    teardown do
+      Object.send(:remove_const, :TaskClass) rescue nil
+    end
+
+    should "map a taskname to a pid when included" do
+      mock(FAF::Client).run(satisfy { |cmd|
+        (cmd.pid == $$) && (cmd.task_name == :tasking)
+      })
+      TaskClass.send(:include, FAF::DaemonMethods[:tasking])
     end
   end
 end

@@ -17,7 +17,7 @@ end
 
 require 'fire_and_forget'
 
-include FAF::DaemonMethods
+include FAF::DaemonMethods[:publish]
 
 
 File.open(File.join(File.dirname(__FILE__), "../../long.out"), 'w') do |file|
@@ -28,7 +28,7 @@ File.open(File.join(File.dirname(__FILE__), "../../long.out"), 'w') do |file|
   60.times do |i|
     file.write("#{i}\n")
     begin
-      set_status(:publish, i)
+      set_status(i)
     rescue Exception => e
       file.write(e.to_s + "\n")
     end
