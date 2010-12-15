@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
   s.authors = ["Garry Hill"]
   s.date = %q{2010-12-15}
   s.default_executable = %q{fire_forget}
-  s.description = %q{Fire & Forget is a simple, framework agnostic, background task launcher for Ruby web apps}
   s.email = %q{garry@magnetised.info}
   s.executables = ["fire_forget"]
   s.extra_rdoc_files = [
