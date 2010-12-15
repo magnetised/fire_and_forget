@@ -63,6 +63,12 @@ class TestFireAndForget < Test::Unit::TestCase
       status = FAF::Server.run(cmd)
       status.should == :doing
     end
+    should "only run scripts belonging to the same user as the ruby process" do
+      stub(File).exist?("/publish") { true }
+      stub(File).owned?("/publish") { false }
+      cmd = FAF::Command::FireCommand.new(@task)
+      lambda { cmd.run }.should raise_error(Errno::EACCES)
+    end
   end
 
   context "client" do
@@ -94,7 +100,7 @@ class TestFireAndForget < Test::Unit::TestCase
       command = Object.new
       mock(FAF::Command).load(is_a(String)) { command }
       mock(command).run { "666" }
-      result = FAF::Server.run("object")
+      result = FAF::Server.parse("object")
       result.should == "666"
     end
   end

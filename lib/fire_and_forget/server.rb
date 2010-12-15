@@ -14,8 +14,8 @@ module FireAndForget
       @status ||= {}
     end
 
-    def self.set_pid(task, pid)
-      pids[task.name] = pid.to_i
+    def self.set_pid(task_name, pid)
+      pids[task_name] = pid.to_i
     end
 
     def self.get_pid(task)
