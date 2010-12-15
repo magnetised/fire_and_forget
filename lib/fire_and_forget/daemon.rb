@@ -15,7 +15,7 @@ module FireAndForget
           @@task_name
         end
 
-        def set_status(status)
+        def set_task_status(status)
           FAF.set_status(@@task_name, status)
         end
       end

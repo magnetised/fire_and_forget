@@ -14,4 +14,3 @@ module FireAndForget
   end
 end
 
-FAF = FireAndForget
