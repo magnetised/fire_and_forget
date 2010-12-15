@@ -20,12 +20,12 @@ What it doesn't:
 
 FAF works by running a simple TCP socket server so before we want to use it we have to start this server.
 
-  $ faf
+  $ fire_forget
   FAF process 16235 listening on 127.0.0.1:3001...
 
 The service defaults to listening to port 3001 on localhost. You can change these values thus:
 
-  $ faf -a 192.168.1.22 -p 9090
+  $ fire_forget -a 192.168.1.22 -p 9090
 
 If you do this you will need to set both the web-app and the tasks to use the right values using
 
