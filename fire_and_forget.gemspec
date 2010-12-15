@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{fire_and_forget}
-  s.version = "0.0.0"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Garry Hill"]
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
     "VERSION",
     "bin/long",
     "bin/server",
+    "fire_and_forget.gemspec",
     "lib/fire_and_forget.rb",
     "lib/fire_and_forget/client.rb",
     "lib/fire_and_forget/command.rb",

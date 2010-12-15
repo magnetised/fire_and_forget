@@ -8,8 +8,10 @@ rescue Bundler::BundlerError => e
   exit e.status_code
 end
 require 'rake'
-
 require 'jeweler'
+
+require 'lib/fire_and_forget/version'
+
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "fire_and_forget"
@@ -19,6 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{TODO: longer description of your gem}
   gem.email = "garry@magnetised.info"
   gem.authors = ["Garry Hill"]
+  gem.version = FireAndForget::VERSION
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
   #  gem.add_runtime_dependency 'jabber4r', '> 0.1'
