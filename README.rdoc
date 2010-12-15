@@ -18,16 +18,19 @@ What it doesn't:
 == Quick Start
 
 
-FAF works by running a simple TCP socket server so before we want to use it we have to start this server.
+FAF works by running a simple TCP socket server so before we want to use it we
+have to start this server.
 
   $ fire_forget
   FAF process 16235 listening on 127.0.0.1:3001...
 
-The service defaults to listening to port 3001 on localhost. You can change these values thus:
+The service defaults to listening to port 3001 on localhost. You can change
+these values thus:
 
   $ fire_forget -a 192.168.1.22 -p 9090
 
-If you do this you will need to set both the web-app and the tasks to use the right values using
+If you do this you will need to set both the web-app and the tasks to use the
+right values using
 
   FireAndForget.port = 9090
   FireAndForget.bind_address = "192.168.1.22"
@@ -40,8 +43,8 @@ Now inside our Ruby app:
   # First set register our task by giving it a name and a path to a script file
   FireAndForget.add_task(:long_running_task, "/path/to/script")
 
-  # when we want to call the script we simple call #fire passing the name of the task and the options
-  # we want to pass
+  # when we want to call the script we simple call #fire passing the name of the
+  # task and the options we want to pass
   FireAndForget.fire(:long_running_task, {:param3 => "value3"})
 
   # Or, use the name as a method:
@@ -52,6 +55,23 @@ This will result in the following command being exec'd in an independent process
   /path/to/script --param3="value3"
 
 It up to the script to parse and deal with the command line options.
+
+You can pass a couple of extra options to the #add_task method for example:
+
+  FireAndForget.add_task(:long_running_task, "/path/to/script", {:param1 => "value1", :param2 => "value2", :param3 => "value3"}, 12)
+
+this will add some default parameters to all invocations of the task, so now the call
+
+  FireAndForget.fire(:long_running_task, {:param3 => "newvalue3"})
+
+will issue the following command in the background:
+
+  /path/to/script --param1="value1" --param2="value2" --param3="newvalue3"
+
+the final parameter in the #add_task call is a "niceness" value. This will set the
+UNIX nice setting of the script to the desired value so that you can launch
+intensive background tasks without affecting the performance of your front line
+HTTP services.
 
 Interprocess communication is relatively easy. Take the following as the source of the script "/path/to/script"
 
@@ -85,7 +105,11 @@ If we decided we've had enough then we can kill it:
 
 == Security
 
-F&F is intended to be run in a relatively trusted environment and by default only binds to localhost to stop external access. But to stop unintended access to system commands, only scripts belonging to the same user as the F&F server process are executed. This might not be enough so in the future I might add a limit on the locations of runnable scripts.
+F&F is intended to be run in a relatively trusted environment and by default only
+binds to localhost to stop external access. But to stop unintended access to
+system commands, only scripts belonging to the same user as the F&F server
+process are executed. This might not be enough so in the future I might add a
+limit on the locations of runnable scripts.
 
 
 == Contributing to fire_and_forget
