@@ -41,6 +41,19 @@ module FireAndForget
       Client.run(command)
     end
 
+    def term(task_name)
+      kill(task_name, "TERM")
+    end
+
+    def int(task_name)
+      kill(task_name, "INT")
+    end
+
+    def kill(task_name, signal="TERM")
+      command = Command::Kill.new(task_name, signal)
+      Client.run(command)
+    end
+
     protected
 
     def method_missing(method, *args, &block)
