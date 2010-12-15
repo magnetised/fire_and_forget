@@ -34,22 +34,26 @@ server = nil
 begin
   server = TCPServer.new(options.bind_address, options.port)
 rescue Errno::EADDRINUSE
-  puts "FAF already running on #{options.bind_address}:#{options.port}"
+  puts "FAF unable to bind to #{options.bind_address}:#{options.port}"
   exit(1)
 end
-puts "FAF running on #{options.bind_address}:#{options.port}"
-
 
 run = true
 
 server_thread = Thread.new do
   while run and (session = server.accept)
-    request = ""
+    request = response = ""
+
     while l = session.gets
       request << l
     end
-    response = "#{FAF::Server.parse(request)}"
     session.close_read
+
+    begin
+      response = FAF::Server.parse(request)
+    rescue  => e
+      response = "ERROR #{e}"
+    end
     session.write(response)
     session.close
   end
@@ -62,4 +66,7 @@ end
   end
 end
 
+puts "FAF process #{$$} listening on #{options.bind_address}:#{options.port}..."
+
 server_thread.join
+

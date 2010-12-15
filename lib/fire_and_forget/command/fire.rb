@@ -19,11 +19,17 @@ module FireAndForget
       end
 
       def permitted?
-        File.exists?(binary) && File.owned?(binary)
+        raise Errno::EACCES.new("'#{binary}' does not belong to user '#{ENV["USER"]}'") unless File.owned?(binary)
+        true
+      end
+
+      def valid?
+        raise Errno::ENOENT.new("'#{binary}'") unless File.exists?(binary)
+        true
       end
 
       def run
-        if permitted?
+        if valid? && permitted?
           pid = fork do
             Daemons.daemonize(:backtrace => true)
             Process.setpriority(Process::PRIO_PROCESS, 0, niceness) if niceness > 0
@@ -31,8 +37,6 @@ module FireAndForget
           end
           Process.detach(pid) if pid
           pid
-        else
-          raise Errno::EACCES
         end
       end
     end

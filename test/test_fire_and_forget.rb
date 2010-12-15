@@ -66,9 +66,17 @@ class TestFireAndForget < Test::Unit::TestCase
     end
     should "only run scripts belonging to the same user as the ruby process" do
       stub(File).exist?("/publish") { true }
+      stub(File).exists?("/publish") { true }
       stub(File).owned?("/publish") { false }
       cmd = FAF::Command::Fire.new(@task)
       lambda { cmd.run }.should raise_error(Errno::EACCES)
+    end
+    should "give error if binary doesn't exist" do
+      stub(File).exist?("/publish") { false }
+      stub(File).exists?("/publish") { false }
+      stub(File).owned?("/publish") { true }
+      cmd = FAF::Command::Fire.new(@task)
+      lambda { cmd.run }.should raise_error(Errno::ENOENT )
     end
   end
 
