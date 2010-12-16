@@ -1,7 +1,7 @@
 
 
 module FireAndForget
-  class Task
+  class TaskDescription
     attr_reader :name, :binary, :niceness, :params
 
     def initialize(name, path_to_binary, default_parameters={}, niceness=0)

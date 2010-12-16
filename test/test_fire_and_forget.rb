@@ -42,7 +42,7 @@ class TestFireAndForget < Test::Unit::TestCase
 
   context "commands" do
     should "serialize and deserialize correctly" do
-      task = FAF::Task.new(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 9)
+      task = FAF::TaskDescription.new(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 9)
       cmd = FAF::Command::CommandBase.new(task, {"param2" => "newvalue2", :param3 => "value3"})
       cmd2 = FAF::Command.load(cmd.dump)
       task2 = cmd2.task
@@ -55,7 +55,7 @@ class TestFireAndForget < Test::Unit::TestCase
 
   context "actions" do
     setup do
-      @task = FAF::Task.new(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 9)
+      @task = FAF::TaskDescription.new(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 9)
     end
     should "set status for a task" do
       cmd = FAF::Command::SetStatus.new(:publish, :doing)
@@ -115,17 +115,17 @@ class TestFireAndForget < Test::Unit::TestCase
   end
   context "daemon methods" do
     setup do
-      class ::TaskClass; end
+      class ::TaskDescriptionClass; end
     end
     teardown do
-      Object.send(:remove_const, :TaskClass) rescue nil
+      Object.send(:remove_const, :TaskDescriptionClass) rescue nil
     end
 
     should "map a taskname to a pid when included" do
       mock(FAF::Client).run(satisfy { |cmd|
         (cmd.pid == $$) && (cmd.task_name == :tasking)
       })
-      TaskClass.send(:include, FAF::Daemon[:tasking])
+      TaskDescriptionClass.send(:include, FAF::Daemon[:tasking])
     end
   end
 end

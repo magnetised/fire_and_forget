@@ -5,7 +5,7 @@ module FireAndForget
         niceness = default_params
         default_params = {}
       end
-      tasks[task_name] = Task.new(task_name, path_to_binary, default_params, niceness)
+      tasks[task_name] = TaskDescription.new(task_name, path_to_binary, default_params, niceness)
     end
 
     def binary(task_name)
