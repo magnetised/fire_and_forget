@@ -7,6 +7,14 @@ module FireAndForget
       Marshal.load(command)
     end
 
+    def self.allowed?(cmd)
+      allowed_commands.include?(cmd.class)
+    end
+
+    def self.allowed_commands
+      @allowed_commands ||= self.constants.map { |c| self.const_get(c) }.select { |k| k.respond_to?(:ancestors) && k.ancestors.include?(CommandBase) }
+    end
+
     class CommandBase
       attr_reader :tag, :cmd, :params, :task
 

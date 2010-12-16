@@ -78,6 +78,12 @@ class TestFireAndForget < Test::Unit::TestCase
       cmd = FAF::Command::Fire.new(@task)
       lambda { cmd.run }.should raise_error(Errno::ENOENT )
     end
+
+    should "raise error if command isn't one of the approved list" do
+      cmd = Object.new
+      mock(cmd).run.times(0)
+      lambda { FAF::Server.run(cmd) }.should raise_error
+    end
   end
 
   context "client" do
@@ -107,6 +113,7 @@ class TestFireAndForget < Test::Unit::TestCase
 
     should "run any command sent to it" do
       command = Object.new
+      stub(FAF::Command).allowed? { true }
       mock(FAF::Command).load(is_a(String)) { command }
       mock(command).run { "666" }
       result = FAF::Server.parse("object")

@@ -7,7 +7,11 @@ module FireAndForget
     end
 
     def self.run(cmd)
-      cmd.run
+      if Command.allowed?(cmd)
+        cmd.run
+      else
+        raise Errno::EACCES.new("'#{cmd.class}' is not an approved command")
+      end
     end
 
     def self.kill(task_name, signal="TERM")
