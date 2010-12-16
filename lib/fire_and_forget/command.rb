@@ -12,7 +12,9 @@ module FireAndForget
     end
 
     def self.allowed_commands
-      @allowed_commands ||= self.constants.map { |c| self.const_get(c) }.select { |k| k.respond_to?(:ancestors) && k.ancestors.include?(CommandBase) }
+      @allowed_commands ||= self.constants.map { |c| self.const_get(c) }.select do |k|
+        k.respond_to?(:ancestors) && k.ancestors.include?(CommandBase)
+      end
     end
 
     class CommandBase
