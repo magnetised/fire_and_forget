@@ -23,12 +23,12 @@ module FireAndForget
       end
 
       def permitted?
-        raise Errno::EACCES.new("'#{binary}' does not belong to user '#{ENV["USER"]}'") unless File.owned?(binary)
+        raise PermissionsError, "'#{binary}' does not belong to user '#{ENV["USER"]}'" unless File.owned?(binary)
         true
       end
 
       def exists?
-        raise Errno::ENOENT.new("'#{binary}'") unless File.exists?(binary)
+        raise FileNotFoundError, "'#{binary}'" unless File.exists?(binary)
         true
       end
 

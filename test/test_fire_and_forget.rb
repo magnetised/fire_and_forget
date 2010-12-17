@@ -7,7 +7,7 @@ class TestFireAndForget < Test::Unit::TestCase
         :param1 => "value1",
         :param2 => "value2",
         :array => [1, 2, "3"]
-      }).should == %(--array=[1,2,"3"] --param1="value1" --param2="value2")
+      }).should == %(--array="[1,2,\\"3\\"]" --param1="value1" --param2="value2")
     end
   end
   context "configuration" do
@@ -69,20 +69,20 @@ class TestFireAndForget < Test::Unit::TestCase
       stub(File).exists?("/publish") { true }
       stub(File).owned?("/publish") { false }
       cmd = FAF::Command::Fire.new(@task)
-      lambda { cmd.run }.should raise_error(Errno::EACCES)
+      lambda { cmd.run }.should raise_error(FAF::PermissionsError)
     end
     should "give error if binary doesn't exist" do
       stub(File).exist?("/publish") { false }
       stub(File).exists?("/publish") { false }
       stub(File).owned?("/publish") { true }
       cmd = FAF::Command::Fire.new(@task)
-      lambda { cmd.run }.should raise_error(Errno::ENOENT )
+      lambda { cmd.run }.should raise_error(FAF::FileNotFoundError)
     end
 
     should "raise error if command isn't one of the approved list" do
       cmd = Object.new
       mock(cmd).run.times(0)
-      lambda { FAF::Server.run(cmd) }.should raise_error
+      lambda { FAF::Server.run(cmd) }.should raise_error(FAF::PermissionsError)
     end
   end
 

@@ -10,7 +10,7 @@ module FireAndForget
       if Command.allowed?(cmd)
         cmd.run
       else
-        raise Errno::EACCES.new("'#{cmd.class}' is not an approved command")
+        raise PermissionsError, "'#{cmd.class}' is not an approved command"
       end
     end
 

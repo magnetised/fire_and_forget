@@ -11,6 +11,8 @@ module FireAndForget
   autoload :Server, "fire_and_forget/server"
   autoload :Daemon, "fire_and_forget/daemon"
 
+  require "fire_and_forget/errors"
+
   extend Config
   extend Utilities
   extend Launcher
