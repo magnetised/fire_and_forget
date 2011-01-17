@@ -29,15 +29,19 @@ class TestFireAndForget < Test::Unit::TestCase
       FAF.publish(args)
     end
 
-    should "enable setting of port for server" do
-      FAF.port = 3007
-      FAF.port.should == 3007
+    should "enable setting of path to socket" do
+      FAF.socket = "/tmp/something"
+      FAF.socket.should ==  "/tmp/something"
     end
+    # should "enable setting of port for server" do
+    #   FAF.port = 3007
+    #   FAF.port.should == 3007
+    # end
 
-    should "enable setting an address for the server" do
-      FAF.bind_address = "10.0.1.10"
-      FAF.bind_address.should == "10.0.1.10"
-    end
+    # should "enable setting an address for the server" do
+    #   FAF.bind_address = "10.0.1.10"
+    #   FAF.bind_address.should == "10.0.1.10"
+    # end
   end
 
   context "commands" do
@@ -64,13 +68,35 @@ class TestFireAndForget < Test::Unit::TestCase
       status = FAF::Server.run(cmd)
       status.should == :doing
     end
+
     should "only run scripts belonging to the same user as the ruby process" do
       stub(File).exist?("/publish") { true }
       stub(File).exists?("/publish") { true }
-      stub(File).owned?("/publish") { false }
+      stat = Object.new
+      stub(stat).uid { Process.uid + 1 }
+      stub(File).stat("/publish") { stat }
       cmd = FAF::Command::Fire.new(@task)
       lambda { cmd.run }.should raise_error(FAF::PermissionsError)
     end
+
+    should "not raise an error if the binary belongs to this process" do
+      stat = Object.new
+      stub(stat).uid { Process.uid }
+      stub(File).stat("/publish") { stat }
+      cmd = FAF::Command::Fire.new(@task)
+      lambda { cmd.permitted? }.should_not raise_error(FAF::PermissionsError)
+    end
+
+    should "raise an error if the binary belongs to this process" do
+      stat = Object.new
+      uid = Process.uid
+      stub(stat).uid { uid }
+      stub(File).stat("/publish") { stat }
+      stub(Process).euid { uid + 1 }
+      cmd = FAF::Command::Fire.new(@task)
+      lambda { cmd.permitted? }.should raise_error(FAF::PermissionsError)
+    end
+
     should "give error if binary doesn't exist" do
       stub(File).exist?("/publish") { false }
       stub(File).exists?("/publish") { false }
@@ -98,9 +124,8 @@ class TestFireAndForget < Test::Unit::TestCase
       stub(connection).close_write
       mock(connection).read { "99999" }
       mock(connection).close
-      FAF.bind_address = "10.0.1.10"
-      FAF.port = 9007
-      mock(TCPSocket).open("10.0.1.10", 9007) { connection }
+      FAF.socket = "/tmp/faf.sock"
+      mock(UNIXSocket).open("/tmp/faf.sock") { connection }
       pid = FAF.publish({:param2 => "value3"})
       pid.should == "99999"
     end

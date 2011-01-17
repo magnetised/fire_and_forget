@@ -1,14 +1,9 @@
 module FireAndForget
   module Config
-    attr_accessor :port
-    attr_accessor :bind_address
+    attr_accessor :socket
 
-    def port
-      @port ||= FireAndForget::DEFAULT_PORT
-    end
-
-    def bind_address
-      @bind_address ||= "127.0.0.1"
+    def socket
+      @socket ||= FireAndForget::DEFAULT_SOCKET
     end
   end
 end

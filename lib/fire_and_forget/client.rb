@@ -13,7 +13,7 @@ module FireAndForget
       def open_connection
         connection = result = nil
         begin
-          connection = TCPSocket.open(FireAndForget.bind_address, FireAndForget.port)
+          connection = UNIXSocket.open(FireAndForget.socket)
           yield(connection)
           connection.flush
           connection.close_write

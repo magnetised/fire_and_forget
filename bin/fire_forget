@@ -11,44 +11,61 @@ require 'rubygems' unless defined?(Gem)
 require 'ostruct'
 require 'optparse'
 require 'socket'
+require 'etc'
 require 'fire_and_forget'
 
 options = OpenStruct.new
-options.bind_address = "127.0.0.1"
-options.port = FAF::DEFAULT_PORT
+options.socket = FireAndForget::DEFAULT_SOCKET
+options.gid = Process.egid
 
 OptionParser.new do |opts|
-  opts.on("-a", "--bind-address ADDRESS", "Bind Address") { |v| options.bind_address = v }
-  opts.on("-p", "--port PORT", Integer, "Port") { |p| options.port = p }
+  opts.on("-s", "--socket SOCKET", "Socket") { |v| options.socket = v }
+  opts.on("-g", "--socket-group GROUPNAME", "Socket owning group") { |v| options.gid = nil; options.group_name = v }
 end.parse!
+
+raise ArgumentError, "You must specify a socket file using -s" unless options.socket
+unless options.gid
+  if options.group_name
+    options.gid = Etc.getgrnam(options.group_name).gid
+  end
+end
 
 server = nil
 
 begin
-  server = TCPServer.new(options.bind_address, options.port)
+  raise Errno::EADDRINUSE if File.exists?(options.socket) and File.socket?(options.socket)
+  server = UNIXServer.new(options.socket)
+  File.chown(nil, options.gid, options.socket)
+  # make the socket group writable
+  File.chmod(0770, options.socket)
 rescue Errno::EADDRINUSE
-  puts "FAF unable to bind to #{options.bind_address}:#{options.port}"
+  puts "FAF unable to create socket #{options.socket}: file exists"
   exit(1)
 end
 
 run = true
 
 server_thread = Thread.new do
-  while run and (session = server.accept)
-    request = response = ""
+  begin
+    while run and (session = server.accept)
+      request = response = ""
 
-    while l = session.gets
-      request << l
-    end
-    session.close_read
+      while l = session.gets
+        request << l
+      end
+      session.close_read
 
-    begin
-      response = FAF::Server.parse(request)
-    rescue  => e
-      response = "ERROR #{e}"
+      begin
+        response = FAF::Server.parse(request)
+      rescue  => e
+        response = "ERROR #{e}"
+      end
+      session.write(response)
+      session.close
     end
-    session.write(response)
-    session.close
+  ensure
+    server.close
+    File.unlink(options.socket) if File.exists?(options.socket)
   end
 end
 
@@ -59,7 +76,7 @@ end
   end
 end
 
-puts "Fire&Forget process #{$$} listening on #{options.bind_address}:#{options.port}..."
+puts "Fire&Forget process #{$$} listening on #{options.socket} ..."
 
 server_thread.join
 

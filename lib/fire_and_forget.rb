@@ -1,6 +1,6 @@
 
 module FireAndForget
-  DEFAULT_PORT = 3001
+  DEFAULT_SOCKET = "/tmp/fire_and_forget.sock"
 
   autoload :Config, "fire_and_forget/config"
   autoload :Utilities, "fire_and_forget/utilities"
