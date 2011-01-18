@@ -51,7 +51,9 @@ module FireAndForget
             exec(cmd)
           end
           Process.detach(pid) if pid
-          pid
+          # don't return the PID as it's actually wrong (the daemonize call forks again so our original
+          # PID is at least 1 out)
+          "OK"
         end
       end
     end

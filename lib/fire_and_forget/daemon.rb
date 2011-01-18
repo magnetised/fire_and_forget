@@ -1,5 +1,5 @@
 module FireAndForget
-  module Daemon # need better name!
+  module Daemon
 
     def self.task_name
       ENV[FireAndForget::ENV_TASK_NAME]
@@ -19,3 +19,4 @@ module FireAndForget
     end
   end
 end
+
