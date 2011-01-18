@@ -3,7 +3,7 @@ module FireAndForget
     attr_accessor :socket
 
     def socket
-      @socket ||= FireAndForget::DEFAULT_SOCKET
+      @socket ||= (ENV[FireAndForget::ENV_SOCKET] || FireAndForget::DEFAULT_SOCKET)
     end
   end
 end

@@ -1,6 +1,8 @@
 
 module FireAndForget
   DEFAULT_SOCKET = "/tmp/fire_and_forget.sock"
+  ENV_SOCKET = "FAF_SOCKET"
+  ENV_TASK_NAME = "FAF_TASK_NAME"
 
   autoload :Config, "fire_and_forget/config"
   autoload :Utilities, "fire_and_forget/utilities"

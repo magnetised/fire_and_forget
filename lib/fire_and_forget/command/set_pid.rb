@@ -15,5 +15,3 @@ module FireAndForget
   end
 end
 
-
-

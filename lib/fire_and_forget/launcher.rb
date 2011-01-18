@@ -40,6 +40,13 @@ module FireAndForget
       command = Command::SetPid.new(task_name, pid)
       Client.run(command)
     end
+    alias_method :set_pid, :map_pid
+
+    def get_pid(task_name)
+      command = Command::GetPid.new(task_name)
+      Client.run(command)
+    end
+    alias_method :pid, :get_pid
 
     def term(task_name)
       kill(task_name, "TERM")

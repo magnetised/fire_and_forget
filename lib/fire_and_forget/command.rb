@@ -49,5 +49,6 @@ module FireAndForget
     autoload :SetStatus, "fire_and_forget/command/set_status"
     autoload :GetStatus, "fire_and_forget/command/get_status"
     autoload :SetPid, "fire_and_forget/command/set_pid"
+    autoload :GetPid, "fire_and_forget/command/get_pid"
   end
 end

@@ -41,11 +41,13 @@ module FireAndForget
       def run
         if valid?
           pid = fork do
+            # set up the environment so that the task can access the F&F server
+            ENV[FireAndForget::ENV_SOCKET] = FireAndForget.socket
+            ENV[FireAndForget::ENV_TASK_NAME] = @task.name.to_s
             Daemons.daemonize(:backtrace => true)
             Process.setpriority(Process::PRIO_PROCESS, 0, niceness) if niceness > 0
-            # change to the UID of the originating thread
-            Process::GID.change_privilege(task_gid)
-            Process::UID.change_privilege(task_uid)
+            # change to the UID of the originating thread if necessary
+            Process::UID.change_privilege(task_uid) unless Process.euid == task_uid
             exec(cmd)
           end
           Process.detach(pid) if pid
