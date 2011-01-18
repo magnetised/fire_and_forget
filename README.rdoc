@@ -14,28 +14,26 @@ What it doesn't:
 
 - Have any kind of queue mechanism. If you fire the same task twice then that task will be running twice
 - Have any persistant state
+- Work in non-UNIX environments
 
 == Quick Start
 
   gem install fire_and_forget
 
-FAF works by running a simple TCP socket server so before we want to use it we
+FAF works by running a simple UNIX socket server so before we want to use it we
 have to start this server.
 
   $ fire_forget
-  FAF process 16235 listening on 127.0.0.1:3001...
+  FAF process 16235 listening on /tmp/fire_and_forget.sock ...
 
-The service defaults to listening to port 3001 on localhost. You can change
-these values thus:
+To change the path of the socket file use the '-s' parameter:
 
-  $ fire_forget -a 192.168.1.22 -p 9090
-  FAF process 16240 listening on 192.168.1.22:9090...
+  $ fire_forget -s /path/to/socket
+  FAF process 16240 listening on /path/to/socket ...
 
-If you do this you will need to set both the web-app and the tasks to use the
-right values using
+If you do this you will need to set the web-app to use the right values:
 
-  FireAndForget.port = 9090
-  FireAndForget.bind_address = "192.168.1.22"
+  FireAndForget.socket = "/path/to/socket"
 
 Now inside our Ruby app:
 
@@ -44,13 +42,16 @@ Now inside our Ruby app:
 
   # First set register our task by giving it a name and a path to a script file
   FireAndForget.add_task(:long_running_task, "/path/to/script")
+  # => #<FireAndForget::TaskDescription @name=:long_running_task ...>
 
   # when we want to call the script we simple call #fire passing the name of the
   # task and the options we want to pass
   FireAndForget.fire(:long_running_task, {:param3 => "value3"})
+  # => "OK"
 
   # Or, use the name as a method:
   FireAndForget.long_running_task({:param3 => "value3"})
+  # => "OK"
 
 This will result in the following command being exec'd in an independent process:
 
@@ -85,9 +86,9 @@ Interprocess communication is relatively easy. Take the following as the source 
   require 'rubygems'
   require 'fire_and_forget'
 
-  # this will mix in the comms methods and map this task to the :long_running_task label
-  # used in the calling script
-  include FireAndForget::Daemon[:long_running_task]
+  # this will mix in the F&F status methods
+  # the F&F configuration (socket and task-name) is calculated automatically from ENV parameters
+  include FireAndForget::Daemon
 
   30.times do |i|
     # update our status. What you put here is up to you, but it should be a String
@@ -108,18 +109,32 @@ If we decided we've had enough then we can kill it:
   # Or send any signal (see the Process.kill documentation)
   FireAndForget.kill(:long_running_task, "HUP")
 
+== Supporting multiple users
+
+Tasks will attempt to run as the same user as the originating process. To enable
+this, and hence enable a single F&F server to launch tasks for any number of
+separate web-apps, simply run the F&F server as root. See the following section on
+Security for the implications of this and how to stop unlimited access to the service.
+
 == Security
 
-F&F is intended to be run in a relatively trusted environment and by default only
-binds to localhost to stop external access. But to stop unintended access to
-system commands, only scripts belonging to the same user as the F&F server
-process are executed. This might not be enough so in the future I might add a
-limit on the locations of runnable scripts.
+F&F is intended to be run in a relatively trusted environment. You the UNIX
+socket file has its permissions set so that only the process owner and a defined
+group can write to the file. To change the UNIX group that has access pass the
+group name as a parameter to the server:
+
+  $ fire_forget -s /path/to/socket -g webapp_group
+
+Only members of the 'webapp_group' will be able to launch processes through
+the server. Additionally, only scripts belonging to the same user as the F&F task description
+are executed.
+
+In the meantime, as I say, this is defined to be run in a trusted environment, for instance on a
+single non-shared server (potentially running many sites).
 
 == TODO
 
-- Embed info about the F&F server address into the script parameters and then silently extract those inside the Daemon module. Otherwise you might have to duplicate configuration values (or jump through hoops to avoid it)
-- Improve security restrictions
+- Improve security restrictions (perhaps by limiting the tasks that each user can launch)
 - Improve the tests so they are closer to testing the full stack
 
 == Contributing to fire_and_forget
