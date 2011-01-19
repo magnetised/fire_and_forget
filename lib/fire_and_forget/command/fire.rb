@@ -1,5 +1,5 @@
 
-require 'daemons'
+require 'daemons' unless defined?(Daemons)
 
 module FireAndForget
   module Command
