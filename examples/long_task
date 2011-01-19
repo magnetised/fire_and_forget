@@ -3,10 +3,13 @@
 Dir.chdir(File.join(File.dirname(__FILE__), '..'))
 
 File.open(File.join(File.dirname(__FILE__), "../../long.out"), 'w+') do |file|
+  file.sync = true
   STDOUT.reopen(file)
   STDERR.reopen(file)
+
   $:.unshift(File.dirname(__FILE__) + "/../lib")
 
+  require 'etc'
   require 'rubygems'
   require 'bundler'
 
@@ -22,11 +25,17 @@ File.open(File.join(File.dirname(__FILE__), "../../long.out"), 'w+') do |file|
 
   include FAF::Daemon
 
-
-  file.sync = true
+  file.write(("="*40)+"\n")
   file.write("PID: #{$$}\n")
+  file.write("User: #{Etc.getlogin}\n")
+  file.write("UID: #{Process.uid}\n")
   file.write(`ps -xO nice | grep  '^#{$$}'`)
   file.write("\n")
+  ENV.keys.sort.each do | k |
+    file.write(" #{k}: #{ENV[k].inspect}\n")
+  end
+  file.write("\n")
+
   30.times do |i|
     file.write("#{i}\n")
     begin

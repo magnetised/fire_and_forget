@@ -59,25 +59,37 @@ This will result in the following command being exec'd in an independent process
 
 It up to the script to parse and deal with the command line options.
 
-You can pass a couple of extra options to the #add_task method for example:
+The options for the #add_task call are as follows:
 
-  FireAndForget.add_task(:long_running_task, "/path/to/script", {:param1 => "value1", :param2 => "value2", :param3 => "value3"}, 12)
+  task_name: A symbol giving the (unique) name for this task
+  path_to_binary: The path on disk of the executable to run when this task is launched
+  niceness: an integer in the range 0-20 giving the 'niceness' of the task process.
+  default_params: Command line parameters to pass to each invocation of this task
+  env: settings to add to this task's environment
+
+The higher the nice value, the lower the priority of the task. Setting a high 'nice'
+allows you to launch intensive background tasks without affecting the
+performance of your front line HTTP services.
+
+For example:
+
+  FireAndForget.add_task(:long_running_task, "/path/to/script", 12,
+    {:param1 => "value1", :param2 => "value2", :param3 => "value3"},
+    {"ENVIRONMENT_SETTING" => "Something"}
+  )
 
 this will add some default parameters to all invocations of the task, so now the call
 
   FireAndForget.fire(:long_running_task, {:param3 => "newvalue3"})
 
-will issue the following command in the background:
+will issue the following command in the background
 
   /path/to/script --param1="value1" --param2="value2" --param3="newvalue3"
 
+as well as setting it's nice value to 12 and updating ENV with the extra parameter "ENVIRONMENT_SETTING".
+
 Parameter values are JSON encoded so you can pass arrays or hashes. Again, it is
 up to the script to decode these values.
-
-The final parameter in the #add_task call is a "niceness" value. This will set the
-UNIX nice setting of the script to the desired value so that you can launch
-intensive background tasks without affecting the performance of your front line
-HTTP services.
 
 Interprocess communication is relatively easy. Take the following as the source of the script "/path/to/script"
 

@@ -46,7 +46,7 @@ class TestFireAndForget < Test::Unit::TestCase
 
   context "commands" do
     should "serialize and deserialize correctly" do
-      task = FAF::TaskDescription.new(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 9)
+      task = FAF::TaskDescription.new(:publish, "/publish", 9, {:param1 => "value1", :param2 => "value2"})
       cmd = FAF::Command::CommandBase.new(task, {"param2" => "newvalue2", :param3 => "value3"})
       cmd2 = FAF::Command.load(cmd.dump)
       task2 = cmd2.task
@@ -59,14 +59,14 @@ class TestFireAndForget < Test::Unit::TestCase
 
   context "actions" do
     setup do
-      @task = FAF::TaskDescription.new(:publish, "/publish", {:param1 => "value1", :param2 => "value2"}, 9)
+      @task = FAF::TaskDescription.new(:publish, "/publish", 9, {:param1 => "value1", :param2 => "value2"})
     end
     should "set status for a task" do
       cmd = FAF::Command::SetStatus.new(:publish, :doing)
       FAF::Server.run(cmd)
       cmd = FAF::Command::GetStatus.new(:publish)
       status = FAF::Server.run(cmd)
-      status.should == :doing
+      status.should == "doing"
     end
 
     should "only run scripts belonging to the same user as the ruby process" do

@@ -9,7 +9,7 @@ module FireAndForget
 
       def run
         FireAndForget::Server.set_pid(@task_name, @pid)
-        FireAndForget::Server.status[@task_name] = @status_value
+        FireAndForget::Server.status[@task_name] = @status_value.to_s
       end
     end
   end

@@ -38,12 +38,18 @@ module FireAndForget
         true
       end
 
+      def env
+        @task.env.merge({
+          FireAndForget::ENV_SOCKET => FireAndForget.socket,
+          FireAndForget::ENV_TASK_NAME => @task.name.to_s
+        })
+      end
+
       def run
         if valid?
           pid = fork do
             # set up the environment so that the task can access the F&F server
-            ENV[FireAndForget::ENV_SOCKET] = FireAndForget.socket
-            ENV[FireAndForget::ENV_TASK_NAME] = @task.name.to_s
+            env.each { | k, v | ENV[k] = v }
             Daemons.daemonize(:backtrace => true)
             Process.setpriority(Process::PRIO_PROCESS, 0, niceness) if niceness > 0
             # change to the UID of the originating thread if necessary
