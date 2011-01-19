@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{fire_and_forget}
-  s.version = "0.1.2"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Garry Hill"]
-  s.date = %q{2010-12-15}
+  s.date = %q{2011-01-19}
   s.default_executable = %q{fire_forget}
   s.email = %q{garry@magnetised.info}
   s.executables = ["fire_forget"]
@@ -31,19 +31,56 @@ Gem::Specification.new do |s|
     "lib/fire_and_forget/client.rb",
     "lib/fire_and_forget/command.rb",
     "lib/fire_and_forget/command/fire.rb",
+    "lib/fire_and_forget/command/get_pid.rb",
     "lib/fire_and_forget/command/get_status.rb",
     "lib/fire_and_forget/command/kill.rb",
     "lib/fire_and_forget/command/set_pid.rb",
     "lib/fire_and_forget/command/set_status.rb",
     "lib/fire_and_forget/config.rb",
     "lib/fire_and_forget/daemon.rb",
+    "lib/fire_and_forget/errors.rb",
     "lib/fire_and_forget/launcher.rb",
     "lib/fire_and_forget/server.rb",
-    "lib/fire_and_forget/task.rb",
+    "lib/fire_and_forget/task_description.rb",
     "lib/fire_and_forget/utilities.rb",
     "lib/fire_and_forget/version.rb",
     "test/helper.rb",
-    "test/test_fire_and_forget.rb"
+    "test/test_fire_and_forget.rb",
+    "vendor/daemons-1.1.0/LICENSE",
+    "vendor/daemons-1.1.0/README",
+    "vendor/daemons-1.1.0/Rakefile",
+    "vendor/daemons-1.1.0/Releases",
+    "vendor/daemons-1.1.0/TODO",
+    "vendor/daemons-1.1.0/lib/daemons.rb",
+    "vendor/daemons-1.1.0/lib/daemons/application.rb",
+    "vendor/daemons-1.1.0/lib/daemons/application_group.rb",
+    "vendor/daemons-1.1.0/lib/daemons/change_privilege.rb",
+    "vendor/daemons-1.1.0/lib/daemons/cmdline.rb",
+    "vendor/daemons-1.1.0/lib/daemons/controller.rb",
+    "vendor/daemons-1.1.0/lib/daemons/daemonize.rb",
+    "vendor/daemons-1.1.0/lib/daemons/etc_extension.rb",
+    "vendor/daemons-1.1.0/lib/daemons/exceptions.rb",
+    "vendor/daemons-1.1.0/lib/daemons/monitor.rb",
+    "vendor/daemons-1.1.0/lib/daemons/pid.rb",
+    "vendor/daemons-1.1.0/lib/daemons/pidfile.rb",
+    "vendor/daemons-1.1.0/lib/daemons/pidmem.rb",
+    "vendor/daemons-1.1.0/setup.rb",
+    "vendor/json-1.5.0/COPYING",
+    "vendor/json-1.5.0/GPL",
+    "vendor/json-1.5.0/README",
+    "vendor/json-1.5.0/README-json-jruby.markdown",
+    "vendor/json-1.5.0/Rakefile",
+    "vendor/json-1.5.0/TODO",
+    "vendor/json-1.5.0/VERSION",
+    "vendor/json-1.5.0/lib/json.rb",
+    "vendor/json-1.5.0/lib/json/add/core.rb",
+    "vendor/json-1.5.0/lib/json/add/rails.rb",
+    "vendor/json-1.5.0/lib/json/common.rb",
+    "vendor/json-1.5.0/lib/json/editor.rb",
+    "vendor/json-1.5.0/lib/json/pure.rb",
+    "vendor/json-1.5.0/lib/json/pure/generator.rb",
+    "vendor/json-1.5.0/lib/json/pure/parser.rb",
+    "vendor/json-1.5.0/lib/json/version.rb"
   ]
   s.homepage = %q{http://github.com/magnetised/fire_and_forget}
   s.licenses = ["MIT"]
