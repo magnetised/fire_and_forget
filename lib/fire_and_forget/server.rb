@@ -8,7 +8,7 @@ module FireAndForget
 
     def self.run(cmd)
       if Command.allowed?(cmd)
-        cmd.run
+        [cmd, cmd.run]
       else
         raise PermissionsError, "'#{cmd.class}' is not an approved command"
       end

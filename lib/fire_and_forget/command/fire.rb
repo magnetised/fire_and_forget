@@ -66,6 +66,10 @@ module FireAndForget
           "OK"
         end
       end
+
+      def debug
+        "Fire :#{@task.name}: #{cmd}\n"
+      end
     end
   end
 end

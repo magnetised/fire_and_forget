@@ -42,6 +42,10 @@ module FireAndForget
         end if call_params
         params
       end
+
+      def debug()
+        "#{self.class.name.split("::").last} #{@task_name}\n"
+      end
     end
 
     autoload :Fire, "fire_and_forget/command/fire"
