@@ -1,4 +1,3 @@
-require "json" unless defined?(JSON)
 
 module FireAndForget
   module Utilities
@@ -8,12 +7,23 @@ module FireAndForget
       end.join(" ")
     end
 
+    # Maps objects to command line parameters suitable for parsing by Thor
+    # @see https://github.com/wycats/thor
     def to_parameter(obj)
-      if obj.is_a?(String)
+      case obj
+      when String
+        obj.inspect
+      when Array
+        obj.map { |o| to_parameter(o.to_s) }.join(' ')
+      when Hash
+        obj.map do |k, v|
+          "#{k}:#{to_parameter(obj[k])}"
+        end.join(' ')
+      when Numeric
         obj
       else
-        JSON.generate(obj)
-      end.inspect
+        to_parameter(obj.to_s)
+      end
     end
   end
 end
