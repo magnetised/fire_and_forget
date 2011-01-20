@@ -77,7 +77,7 @@ class TestFireAndForget < Test::Unit::TestCase
       stub(stat).uid { Process.uid + 1 }
       stub(File).stat("/publish") { stat }
       cmd = FAF::Command::Fire.new(@task)
-      lambda { cmd.run }.should raise_error(FAF::PermissionsError)
+      lambda { cmd.run }.should raise_error
     end
 
     should "not raise an error if the binary belongs to this process" do
@@ -85,7 +85,7 @@ class TestFireAndForget < Test::Unit::TestCase
       stub(stat).uid { Process.uid }
       stub(File).stat("/publish") { stat }
       cmd = FAF::Command::Fire.new(@task)
-      lambda { cmd.permitted? }.should_not raise_error(FAF::PermissionsError)
+      lambda { cmd.permitted? }.should_not raise_error
     end
 
     should "raise an error if the binary belongs to this process" do
@@ -110,6 +110,17 @@ class TestFireAndForget < Test::Unit::TestCase
       cmd = Object.new
       mock(cmd).run.times(0)
       lambda { FAF::Server.run(cmd) }.should raise_error(FAF::PermissionsError)
+    end
+
+    should "work with binaries involving a command" do
+      task = FAF::TaskDescription.new(:publish, "/publish all")
+      stat = Object.new
+      stub(stat).uid { Process.uid }
+      stub(File).stat("/publish") { stat }
+      stub(File).exist?("/publish") { true }
+      stub(File).exists?("/publish") { true }
+      cmd = FAF::Command::Fire.new(task)
+      lambda { cmd.valid? }.should_not raise_error
     end
   end
 

@@ -20,6 +20,10 @@ module FireAndForget
         @task.binary
       end
 
+      def binary_file
+        @task.binary.split(" ").first
+      end
+
       def cmd
         %(#{binary} #{FireAndForget.to_arguments(@params)})
       end
@@ -29,12 +33,12 @@ module FireAndForget
       end
 
       def permitted?
-        raise PermissionsError, "'#{binary}' does not belong to user '#{ENV["USER"]}'" unless File.stat(binary).uid == task_uid
+        raise PermissionsError, "'#{binary_file}' does not belong to user '#{ENV["USER"]}'" unless File.stat(binary_file).uid == task_uid
         true
       end
 
       def exists?
-        raise FileNotFoundError, "'#{binary}'" unless File.exists?(binary)
+        raise FileNotFoundError, "'#{binary_file}'" unless File.exists?(binary_file)
         true
       end
 
