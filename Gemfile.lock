@@ -8,7 +8,6 @@ GEM
       git (>= 1.2.5)
       rake
     jnunemaker-matchy (0.4.0)
-    json (1.4.6)
     rake (0.8.7)
     rr (1.0.2)
     shoulda (2.11.3)
@@ -21,6 +20,5 @@ DEPENDENCIES
   daemons (~> 1.1.0)
   jeweler (~> 1.5.1)
   jnunemaker-matchy (~> 0.4)
-  json (~> 1.4.6)
   rr (~> 1.0.2)
   shoulda

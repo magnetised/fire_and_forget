@@ -8,7 +8,7 @@ class TestFireAndForget < Test::Unit::TestCase
         :param2 => "value2",
         :array => [1, 2, "3 of 4"],
         :hash  => {:name => "Fred", :age => 23}
-      }).should == %(--array="1" "2" "3 of 4" --hash=age:23 name:"Fred" --param1="value1" --param2="value2")
+      }).should == %(--array=1 2 "3 of 4" --hash=age:23 name:"Fred" --param1="value1" --param2="value2")
     end
   end
   context "configuration" do

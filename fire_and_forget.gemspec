@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Garry Hill"]
-  s.date = %q{2011-01-19}
+  s.date = %q{2011-01-20}
   s.default_executable = %q{fire_forget}
   s.email = %q{garry@magnetised.info}
   s.executables = ["fire_forget"]
@@ -64,23 +64,7 @@ Gem::Specification.new do |s|
     "vendor/daemons-1.1.0/lib/daemons/pid.rb",
     "vendor/daemons-1.1.0/lib/daemons/pidfile.rb",
     "vendor/daemons-1.1.0/lib/daemons/pidmem.rb",
-    "vendor/daemons-1.1.0/setup.rb",
-    "vendor/json-1.5.0/COPYING",
-    "vendor/json-1.5.0/GPL",
-    "vendor/json-1.5.0/README",
-    "vendor/json-1.5.0/README-json-jruby.markdown",
-    "vendor/json-1.5.0/Rakefile",
-    "vendor/json-1.5.0/TODO",
-    "vendor/json-1.5.0/VERSION",
-    "vendor/json-1.5.0/lib/json.rb",
-    "vendor/json-1.5.0/lib/json/add/core.rb",
-    "vendor/json-1.5.0/lib/json/add/rails.rb",
-    "vendor/json-1.5.0/lib/json/common.rb",
-    "vendor/json-1.5.0/lib/json/editor.rb",
-    "vendor/json-1.5.0/lib/json/pure.rb",
-    "vendor/json-1.5.0/lib/json/pure/generator.rb",
-    "vendor/json-1.5.0/lib/json/pure/parser.rb",
-    "vendor/json-1.5.0/lib/json/version.rb"
+    "vendor/daemons-1.1.0/setup.rb"
   ]
   s.homepage = %q{http://github.com/magnetised/fire_and_forget}
   s.licenses = ["MIT"]
@@ -97,7 +81,6 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<json>, ["~> 1.4.6"])
       s.add_runtime_dependency(%q<daemons>, ["~> 1.1.0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<jnunemaker-matchy>, ["~> 0.4"])
@@ -105,7 +88,6 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.1"])
       s.add_development_dependency(%q<rr>, ["~> 1.0.2"])
     else
-      s.add_dependency(%q<json>, ["~> 1.4.6"])
       s.add_dependency(%q<daemons>, ["~> 1.1.0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<jnunemaker-matchy>, ["~> 0.4"])
@@ -114,7 +96,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rr>, ["~> 1.0.2"])
     end
   else
-    s.add_dependency(%q<json>, ["~> 1.4.6"])
     s.add_dependency(%q<daemons>, ["~> 1.1.0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<jnunemaker-matchy>, ["~> 0.4"])

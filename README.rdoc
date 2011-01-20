@@ -88,8 +88,12 @@ will issue the following command in the background
 
 as well as setting it's nice value to 12 and updating ENV with the extra parameter "ENVIRONMENT_SETTING".
 
-Parameter values are JSON encoded so you can pass arrays or hashes. Again, it is
-up to the script to decode these values.
+Parameter values are encoded in a format compatible with Thor:
+
+Arrays are encoded as --array=1 2 3
+Hashes as --hash=key1:value1 key2:value2
+
+Again, it is up to the script to decode these values.
 
 Interprocess communication is relatively easy. Take the following as the source of the script "/path/to/script"
 
@@ -148,6 +152,7 @@ single non-shared server (potentially running many sites).
 
 - Improve security restrictions (perhaps by limiting the tasks that each user can launch)
 - Improve the tests so they are closer to testing the full stack
+- Add in scheduled/delayed execution of tasks
 
 == Contributing to fire_and_forget
 

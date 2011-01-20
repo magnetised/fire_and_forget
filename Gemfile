@@ -1,6 +1,5 @@
 source "http://rubygems.org"
 
-gem "json", "~>1.4.6"
 gem "daemons", "~>1.1.0"
 
 group :development do

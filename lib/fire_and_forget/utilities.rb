@@ -14,7 +14,7 @@ module FireAndForget
       when String
         obj.inspect
       when Array
-        obj.map { |o| to_parameter(o.to_s) }.join(' ')
+        obj.map { |o| to_parameter(o) }.join(' ')
       when Hash
         obj.map do |k, v|
           "#{k}:#{to_parameter(obj[k])}"
