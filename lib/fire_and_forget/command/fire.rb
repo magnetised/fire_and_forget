@@ -58,6 +58,7 @@ module FireAndForget
             Process.setpriority(Process::PRIO_PROCESS, 0, niceness) if niceness > 0
             # change to the UID of the originating thread if necessary
             Process::UID.change_privilege(task_uid) unless Process.euid == task_uid
+            File.umask(022)
             exec(cmd)
           end
           Process.detach(pid) if pid
