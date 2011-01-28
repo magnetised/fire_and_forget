@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{fire_and_forget}
-  s.version = "0.3.2"
+  s.version = "0.3.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Garry Hill"]
-  s.date = %q{2011-01-21}
+  s.date = %q{2011-01-28}
   s.default_executable = %q{fire_forget}
   s.email = %q{garry@magnetised.info}
   s.executables = ["fire_forget"]
@@ -45,26 +45,7 @@ Gem::Specification.new do |s|
     "lib/fire_and_forget/utilities.rb",
     "lib/fire_and_forget/version.rb",
     "test/helper.rb",
-    "test/test_fire_and_forget.rb",
-    "vendor/daemons-1.1.0/LICENSE",
-    "vendor/daemons-1.1.0/README",
-    "vendor/daemons-1.1.0/Rakefile",
-    "vendor/daemons-1.1.0/Releases",
-    "vendor/daemons-1.1.0/TODO",
-    "vendor/daemons-1.1.0/lib/daemons.rb",
-    "vendor/daemons-1.1.0/lib/daemons/application.rb",
-    "vendor/daemons-1.1.0/lib/daemons/application_group.rb",
-    "vendor/daemons-1.1.0/lib/daemons/change_privilege.rb",
-    "vendor/daemons-1.1.0/lib/daemons/cmdline.rb",
-    "vendor/daemons-1.1.0/lib/daemons/controller.rb",
-    "vendor/daemons-1.1.0/lib/daemons/daemonize.rb",
-    "vendor/daemons-1.1.0/lib/daemons/etc_extension.rb",
-    "vendor/daemons-1.1.0/lib/daemons/exceptions.rb",
-    "vendor/daemons-1.1.0/lib/daemons/monitor.rb",
-    "vendor/daemons-1.1.0/lib/daemons/pid.rb",
-    "vendor/daemons-1.1.0/lib/daemons/pidfile.rb",
-    "vendor/daemons-1.1.0/lib/daemons/pidmem.rb",
-    "vendor/daemons-1.1.0/setup.rb"
+    "test/test_fire_and_forget.rb"
   ]
   s.homepage = %q{http://github.com/magnetised/fire_and_forget}
   s.licenses = ["MIT"]
@@ -81,14 +62,12 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<daemons>, ["~> 1.1.0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<jnunemaker-matchy>, ["~> 0.4"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.1"])
       s.add_development_dependency(%q<rr>, ["~> 1.0.2"])
     else
-      s.add_dependency(%q<daemons>, ["~> 1.1.0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<jnunemaker-matchy>, ["~> 0.4"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
@@ -96,7 +75,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rr>, ["~> 1.0.2"])
     end
   else
-    s.add_dependency(%q<daemons>, ["~> 1.1.0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<jnunemaker-matchy>, ["~> 0.4"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
