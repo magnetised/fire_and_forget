@@ -3,12 +3,12 @@ module FireAndForget
   class Server
     def self.parse(command_string)
       command = Command.load(command_string)
-      run(command)
+      [command, run(command)]
     end
 
     def self.run(cmd)
       if Command.allowed?(cmd)
-        [cmd, cmd.run]
+        cmd.run
       else
         raise PermissionsError, "'#{cmd.class}' is not an approved command"
       end

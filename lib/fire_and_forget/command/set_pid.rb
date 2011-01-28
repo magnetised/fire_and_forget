@@ -11,6 +11,10 @@ module FireAndForget
       def run
         FireAndForget::Server.pids[@task_name] = @pid
       end
+
+      def debug
+        "SetPid :#{@task_name}: #{@pid}\n"
+      end
     end
   end
 end

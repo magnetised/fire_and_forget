@@ -1,7 +1,5 @@
 source "http://rubygems.org"
 
-gem "daemons", "~>1.1.0"
-
 group :development do
   gem "shoulda", ">= 0"
   gem 'jnunemaker-matchy', '~>0.4'

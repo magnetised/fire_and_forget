@@ -6,10 +6,6 @@ Dir.chdir(File.join(File.dirname(__FILE__), '..'))
 faf_lib_path = File.expand_path(File.dirname(__FILE__) + "/../lib")
 $:.unshift(faf_lib_path) unless $:.include?(faf_lib_path)
 
-# include dependencies without using rubygems (to save memory)
-$:.unshift('vendor/daemons-1.1.0/lib')
-
-require 'vendor/daemons-1.1.0/lib/daemons'
 
 require 'ostruct'
 require 'optparse'

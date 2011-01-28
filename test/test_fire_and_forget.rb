@@ -154,7 +154,7 @@ class TestFireAndForget < Test::Unit::TestCase
       mock(FAF::Command).load(is_a(String)) { command }
       mock(command).run { "666" }
       result = FAF::Server.parse("object")
-      result.should == "666"
+      result.should == [command, "666"]
     end
   end
   context "daemon methods" do

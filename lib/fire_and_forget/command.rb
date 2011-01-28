@@ -44,7 +44,7 @@ module FireAndForget
       end
 
       def debug()
-        "#{self.class.name.split("::").last} #{@task_name}\n"
+        "#{self.class.name.split("::").last} :#{@task_name}\n"
       end
     end
 
